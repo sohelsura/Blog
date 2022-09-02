@@ -42,7 +42,7 @@
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">Blog<em> Flex</em></a>
+                        <a href="{% url 'index' %}" class="logo">Blog<em> Flex</em></a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
@@ -56,8 +56,15 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if 'userdata' in request.session %}
+                                <a class="dropdown-item" href="">Welcome, {{ user.firstname }} {{ user.lastname }}</a>
+                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
+                                <a class="dropdown-item" href="authorblogs/{{ user.id }}">My Blogs</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
                                 <a class="dropdown-item" href="{% url 'userlogin' %}" >Login</a>
                                 <a class="dropdown-item" href="{% url 'signup' %}" >Register</a>
+                                {% endif %}
                             </div>
                             </li>
                         </ul>          

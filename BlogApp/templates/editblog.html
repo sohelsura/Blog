@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/create-blog.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <strong>{{message}}<span>&nbsp;&nbsp;&nbsp;&nbsp;Go back to <a class="loginlink" href="{% url 'index' %}">Home</a> Page</span></strong>
+  </div>
+  {% endfor %}
+  {% endif %}
+    <form method="POST" enctype="multipart/form-data" action="updateblogs/{{ blogdata.id }}" onsubmit="return checkform();">
+      {% csrf_token %}
+      <div class="banner" id="display-image" style="background-image: url({{ blogdata.image }})">
+          <input name="blog-image" type="file" accept="image/*" id="banner-upload" hidden>
+<!--          <label for="banner-upload" class="banner-upload-btn"><i class="fa fa-upload" aria-hidden="true"></i></label>-->
+      </div>
+      <div class="blog">
+        <textarea type="text" id="title" name="blog-title" class="title" placeholder="Blog title...">{{ blogdata.title }}</textarea>
+         <textarea type="text" id="desc" name="small-desc" class="smalldesc" minlength="20" placeholder="Small Description....">{{ blogdata.smalldesc }}</textarea>
+        <textarea type="text" id="content" name="main-content" class="article" minlength="200" placeholder="Start writing here...">{{ blogdata.maincontent }}</textarea>
+      </div>
+      <div class="blog-options">
+        <div><span id="validationerror"></span></div><div></div>
+          <button type="submit" class="publishbtn">Update Blog</button>
+
+      </div>
+    </form>
+  <script>
+    const image_input = document.querySelector("#banner-upload");
+    image_input.addEventListener("change", function() {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const uploaded_image = reader.result;
+        document.querySelector("#display-image").style.backgroundImage = `url(${uploaded_image})`;
+      });
+      reader.readAsDataURL(this.files[0]);
+    });
+
+    /*
+    function checkform(){
+    let image  = document.getElementById('banner-upload').value;
+    let title  = document.getElementById('title').value;
+    let desc  = document.getElementById('desc').value;
+    let content  = document.getElementById('content').value;
+    let errordata = document.getElementById('validationerror')
+    var flag = true;
+
+    if(image.trim()=="" || title.trim()=="" || desc.trim()=="" || content.trim()==""){
+        errordata.style.display = "block";
+        errordata.style.color = "red";
+        errordata.innerHTML = "Please fill all the fields";
+        flag = false;
+    }
+
+    return flag;
+  }*/
+  </script>
+  </body>
+</html>

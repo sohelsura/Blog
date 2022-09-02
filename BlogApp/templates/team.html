@@ -56,8 +56,15 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if 'userdata' in request.session %}
+                                <a class="dropdown-item" href="">Welcome {{ user.firstname }} {{ user.lastname }}</a>
+                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
+                                <a class="dropdown-item" href="authorblogs/{{ user.id }}">My Blogs</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
                                 <a class="dropdown-item" href="{% url 'userlogin' %}" >Login</a>
                                 <a class="dropdown-item" href="{% url 'signup' %}" >Register</a>
+                                {% endif %}
                             </div>
                             </li>
                         </ul>     
@@ -92,15 +99,16 @@
             <br>
             <br>
             <div class="row">
-                <div class="col-md-3 col-sm-6">
+                {% for blogger in blogger %}
+                {% if forloop.counter0|divisibleby:1 %}<div class="col-md-3 col-sm-6">{%  endif %}
                     <div class="trainer-item">
                         <div class="image-thumb">
-                            <img src="{% static 'images/team-image-1-646x680.jpg' %}" alt="">
+                            <img src="{% static 'images/blogger-image.png' %}" alt="">
                         </div>
                         <div class="down-content">
-                            <span>CEO</span>
-                            <h4>John Doe</h4>
-                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>
+                            <span>{{blogger.occupation}}</span>
+                            <h4>{{blogger.firstname}} {{blogger.lastname}}</h4>
+                            <p>{{ blogger.summary }}</p>
                             <ul class="social-icons">
                                 <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                                 <li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -109,62 +117,63 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="{% static 'images/team-image-2-646x680.jpg' %}" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>Customer Support</span>
-                            <h4>Jane Smith</h4>
-                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>
-                            <ul class="social-icons">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="{% static 'images/team-image-3-646x680.jpg' %}" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>Customer Support</span>
-                            <h4>Kate Johnson</h4>
-                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>
-                            <ul class="social-icons">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                {%  if forloop.counter|divisibleby:1 or forloop.last %}</div>{%  endif %}
+                {% endfor %}
+<!--                <div class="col-md-3 col-sm-6">-->
+<!--                    <div class="trainer-item">-->
+<!--                        <div class="image-thumb">-->
+<!--                            <img src="{% static 'images/team-image-2-646x680.jpg' %}" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="down-content">-->
+<!--                            <span>Customer Support</span>-->
+<!--                            <h4>Jane Smith</h4>-->
+<!--                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>-->
+<!--                            <ul class="social-icons">-->
+<!--                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-behance"></i></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-3 col-sm-6">-->
+<!--                    <div class="trainer-item">-->
+<!--                        <div class="image-thumb">-->
+<!--                            <img src="{% static 'images/team-image-3-646x680.jpg' %}" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="down-content">-->
+<!--                            <span>Customer Support</span>-->
+<!--                            <h4>Kate Johnson</h4>-->
+<!--                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>-->
+<!--                            <ul class="social-icons">-->
+<!--                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-behance"></i></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="col-md-3 col-sm-6">
-                    <div class="trainer-item">
-                        <div class="image-thumb">
-                            <img src="{% static 'images/team-image-4-646x680.jpg' %}" alt="">
-                        </div>
-                        <div class="down-content">
-                            <span>Customer Support</span>
-                            <h4>Mark Green</h4>
-                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>
-                            <ul class="social-icons">
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-md-3 col-sm-6">-->
+<!--                    <div class="trainer-item">-->
+<!--                        <div class="image-thumb">-->
+<!--                            <img src="{% static 'images/team-image-4-646x680.jpg' %}" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="down-content">-->
+<!--                            <span>Customer Support</span>-->
+<!--                            <h4>Mark Green</h4>-->
+<!--                            <p>Vestibulum id est eu felis vulputate hendrerit. Suspendisse dapibus turpis in dui pulvinar imperdiet. Nunc consectetur.</p>-->
+<!--                            <ul class="social-icons">-->
+<!--                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>-->
+<!--                                <li><a href="#"><i class="fa fa-behance"></i></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
     </section>

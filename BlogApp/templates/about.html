@@ -56,8 +56,15 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if 'userdata' in request.session %}
+                                <a class="dropdown-item" href="">Welcome, {{ user.firstname }} {{ user.lastname }}</a>
+                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
+                                <a class="dropdown-item" href="authorblogs/{{ user.id }}">My Blogs</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
                                 <a class="dropdown-item" href="{% url 'userlogin' %}" >Login</a>
                                 <a class="dropdown-item" href="{% url 'signup' %}" >Register</a>
+                                {% endif %}
                             </div>
                             </li>
                         </ul>        

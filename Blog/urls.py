@@ -21,5 +21,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('BlogApp.urls')),
-    path('dashboard/', include('BlogAdmin.urls'))
+    path('dashboard/', include('BlogAdmin.urls')),
+    path('accounts/', include('allauth.urls'))
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

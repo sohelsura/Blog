@@ -56,8 +56,15 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if 'userdata' in request.session %}
+                                <a class="dropdown-item" href="">Welcome, {{ user.firstname }} {{ user.lastname }}</a>
+                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
+                                <a class="dropdown-item" href="authorblogs/{{ user.id }}">My Blogs</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
                                 <a class="dropdown-item" href="{% url 'userlogin' %}" >Login</a>
                                 <a class="dropdown-item" href="{% url 'signup' %}" >Register</a>
+                                {% endif %}
                             </div>
                             </li>
                         </ul>         
@@ -99,7 +106,7 @@
                       <article class="mt-5">
                         <img src="{{ blog.image }}" alt="">
                         <h4>{{blog.title}}</h4>
-                        <p><i class="fa fa-user"></i> John Doe &nbsp;|&nbsp; <i class="fa fa-calendar"></i> {{blog.datetime}} &nbsp; <i class="fa fa-comments"></i> </p>
+                        <p><i class="fa fa-user"></i> {{ blog.author }} &nbsp;|&nbsp; <i class="fa fa-calendar"></i> {{blog.datetime}} |&nbsp; <i class="fa fa-comments"></i> </p>
                         <p> {{blog.smalldesc}}</p>
                         <div class="main-button">
                             <a href="blog-details/{{ blog.id }}">Continue Reading</a>
@@ -132,14 +139,45 @@
 <!--                        </div>-->
 <!--                      </article>-->
                     </section>
-                </div>
+                    <nav aria-label="Page navigation example">
+                      <ul class="pagination justify-content-center mt-5">
+                          {% if blogdata.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link" href="?page={{ blogdata.previous_page_number }}" tabindex="-1">Previous</a>
+                        </li>
+                          {% endif %}
 
+                            {% if blogdata.number|add:'-4' > 1 %}
+                                <li class="page-item"><a class="page-link" href="?page={{ blogdata.number|add:'-5' }}">&hellip;</a></li>
+                            {% endif %}
+
+                          {% for pg in blogdata.paginator.page_range %}
+                              {% if blogdata.number == pg %}
+                                <li class="page-item"><a class="page-link" href="?page={{ pg }}">{{ pg }}</a></li>
+                              {% elif pg > blogdata.number|add:'-5' and pg < blogdata.number|add:'5' %}
+                              <li class="page-item"><a class="page-link" href="?page={{ pg }}">{{ pg }}</a></li>
+                              {% endif %}
+                          {% endfor  %}
+
+                          {% if blogdata.paginator.num_pages > blogdata.number|add:'4' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ blogdata.number|add:'5' }}">&hellip;</a></li>
+                            {% endif %}
+
+                          {% if blogdata.has_next %}
+                        <li class="page-item">
+                          <a class="page-link" href="?page={{ blogdata.next_page_number }}">Next</a>
+                        </li>
+                          {% endif %}
+                      </ul>
+                    </nav>
+                </div>
                 <div class="col-lg-4">
                     <h5 class="h5">Search</h5>
                     
                     <div class="contact-form">
-                        <form id="search_form" name="gs" method="GET" action="#">
+                        <form class="d-flex align-items-center justify-content-between" id="search_form" name="gs" method="GET" action="{% url 'blog' %}">
                           <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
+                            <button type="submit" style="margin-bottom:20px"><i class="fa fa-search" aria-hidden="true"></i></button>
                         </form>
                     </div>
 

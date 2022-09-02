@@ -1,5 +1,6 @@
 <html>
   <head>
+    {% load socialaccount %}
      <title>Registration Page</title>
   </head>
   <style>
@@ -21,8 +22,8 @@
       #login-box {
         position: relative;
         margin: 5% auto;
-        width: 600px;
-        height: 400px;
+        width: 650px;
+        height: 720px;
         background: #FFF;
         border-radius: 2px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -67,6 +68,27 @@
         transition: 0.2s ease;
       }
 
+      textarea{
+        display: block;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        padding: 4px;
+        width: 220px;
+        height: 200px;
+        border: none;
+        border-bottom: 1px solid #AAA;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: 15px;
+        transition: 0.2s ease;
+      }
+
+      textarea:focus{
+        border-bottom: 2px solid #16a085;
+        color: #16a085;
+        transition: 0.2s ease;
+      }
+
       input[type="submit"] {
         margin-top: 28px;
         width: 120px;
@@ -97,8 +119,8 @@
 
       .or {
         position: absolute;
-        top: 180px;
-        left: 280px;
+        top: 320px;
+        left: 305px;
         width: 40px;
         height: 40px;
         background: #DDD;
@@ -110,7 +132,7 @@
 
       .right {
         position: absolute;
-        top: 0;
+        top: 205;
         right: 0;
         box-sizing: border-box;
         padding: 40px;
@@ -122,12 +144,8 @@
         border-radius: 0 2px 2px 0;
       }
 
-      .right .loginwith {
+      .right{
         display: block;
-        margin-bottom: 15px;
-        font-size: 28px;
-        color: #FFF;
-        text-align: center;
       }
 
       button.social-signin {
@@ -156,6 +174,7 @@
 
       button.social-signin.facebook {
         background: #32508E;
+        margin-top:20px
       }
 
       button.social-signin.twitter {
@@ -193,50 +212,55 @@
       text-decoration:none;
       color:#32508E;
       }
+
   </style>
 <body>
   {% if messages %}
   {% for message in messages %}
   <div class="alert">
   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-  <strong>{{message}}<span>&nbsp;&nbsp;&nbsp;&nbsp;Go back to <a class="loginlink" href="{% url 'login' %}">Login</a> Page</span></strong>
+  <strong>{{message}}<span>&nbsp;Go back to <a class="loginlink" href="{% url 'userlogin' %}">Login</a> Page</span></strong>
   </div>
   {% endfor %}
   {% endif %}
-  <form method="post" enctype="multipart/form-data" onsubmit="return checkform();">
-    {% csrf_token %}
-  <div id="login-box">
 
+  <div id="login-box">
+<form method="post" enctype="multipart/form-data" onsubmit="return checkform();">
+    {% csrf_token %}
   <div class="left">
     <h1>Sign up</h1>
-    <input type="text" id="username" name="username" placeholder="Name" />
+    <input type="text" id="firstname" name="firstname" placeholder="First Name" />
+    <input type="text" id="lastname" name="lastname" placeholder="Last Name" />
+    <input type="text" id="occupation" name="occupation" placeholder="Occupation" />
+    <textarea  id="summary" name="summary" placeholder="Profile Summary" ></textarea>
     <input type="email" id="useremail" name="useremail" placeholder="E-mail" />
     <input type="password" id="userpass" name="userpassword" placeholder="Password" />
     <input type="password" id="confirmpass" name="confirmpassword" placeholder="Retype password" />
     <label id="validationerror"></label>
     <input type="submit" name="signup_submit" value="Sign Up" />
   </div>
-
+</form>
   <div class="right">
-    <span class="loginwith">Sign in with<br />social network</span>
-
     <button class="social-signin facebook">Log in with facebook</button>
     <button class="social-signin twitter">Log in with Twitter</button>
-    <button class="social-signin google">Log in with Google+</button>
+    <a href="{% provider_login_url 'github' %}" class="social-signin google">Log in with Github</a>
   </div>
   <div class="or">OR</div>
 </div>
-  </form>
+
 <script>
   function checkform(){
-    let name  = document.getElementById('username').value;
+    let firstname  = document.getElementById('firstname').value;
+    let lastname  = document.getElementById('lastname').value;
+    let occupation  = document.getElementById('occupation').value;
+    let summary  = document.getElementById('summary').value;
     let email  = document.getElementById('useremail').value;
     let userpass  = document.getElementById('userpass').value;
     let confirmpass  = document.getElementById('confirmpass').value;
     let errordata = document.getElementById('validationerror')
     let regexpass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
     var flag = true;
-    if(name.trim()=="" || email.trim()=="" || userpass.trim()=="" || confirmpass.trim()==""){
+    if(firstname.trim()=="" || lastname.trim()=="" || email.trim()=="" || userpass.trim()=="" || confirmpass.trim()==""){
         errordata.style.display = "block";
         errordata.style.color = "red";
         errordata.innerHTML = "Please fill all the fields";
@@ -256,6 +280,30 @@
      }
     return flag;
   }
+
+  $(document).ready(function() {
+
+
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+        $(".file-upload").on('change', function(){
+            readURL(this);
+        });
+
+        $(".upload-button").on('click', function() {
+           $(".file-upload").click();
+        });
+    });
 </script>
 </body>
 </html>

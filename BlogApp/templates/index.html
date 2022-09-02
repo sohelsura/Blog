@@ -63,7 +63,6 @@
     </head>
     
     <body>
-    
     <!-- ***** Preloader Start ***** -->
     <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
@@ -99,10 +98,15 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% if 'userdata' in request.session %}
+                                <a class="dropdown-item" href="">Welcome, {{ user.firstname }} {{ user.lastname }}</a>
+                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
+                                <a class="dropdown-item" href="authorblogs/{{ user.id }}">My Blogs</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
                                 <a class="dropdown-item" href="{% url 'userlogin' %}" >Login</a>
                                 <a class="dropdown-item" href="{% url 'signup' %}" >Register</a>
-                                <a class="dropdown-item" href="{% url 'createblog' %}">Create Blog</a>
-                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                {% endif %}
                             </div>
                             </li>
                         </ul>
@@ -166,14 +170,14 @@
               <div class="col-lg-8">
                 <section class='tabs-content'>
                   <article id='tabs-1'>
-                    <img src="{% static 'images/blog-image-1-940x460.jpg' %}" alt="">
-                    <h4>Lorem ipsum dolor sit amet, consectetur adipisicing.</h4>
+                    <img src="{{ randomblog.image }}" alt="">
+                    <h4>{{randomblog.title}}</h4>
 
-                    <p><i class="fa fa-user"></i> John Doe &nbsp;|&nbsp; <i class="fa fa-calendar"></i> 27.07.2020 10:10 &nbsp;|&nbsp; <i class="fa fa-comments"></i>  15 comments</p>
+                    <p><i class="fa fa-user"></i> John Doe &nbsp;|&nbsp; <i class="fa fa-calendar"></i> {{ randomblog.datetime}} &nbsp;|&nbsp; <i class="fa fa-comments"></i>  15 comments</p>
 
-                    <p>Phasellus convallis mauris sed elementum vulputate. Donec posuere leo sed dui eleifend hendrerit. Sed suscipit suscipit erat, sed vehicula ligula. Aliquam ut sem fermentum sem tincidunt lacinia gravida aliquam nunc. Morbi quis erat imperdiet, molestie nunc ut, accumsan diam.</p>
+                    <p>{{randomblog.smalldesc}}</p>
                     <div class="main-button">
-                        <a href="blog-details.html">Continue Reading</a>
+                        <a href="blog-details/{{ randomblog.id }}">Continue Reading</a>
                     </div>
                   </article>
                   <article id='tabs-2'>
