@@ -192,6 +192,7 @@ def updateblogs(request, id):
             blogdata.maincontent = maincontent
             BlogData.objects.update(title=blogtitle, smalldesc=smalldesc, maincontent=maincontent)
             messages.success(request, "Your Blog Post was Updated Successfully")
+            return redirect('index')
     else:
         return redirect('userlogin')
     return render(request, 'login.html')
@@ -200,7 +201,7 @@ def deleteblog(request, id):
     if 'userdata' in request.session:
         blogdata = BlogData.objects.get(id=id)
         blogdata.delete()
-        # return redirect('authorblogs') // Ask sir why its giving error on redirect
+        # return redirect('authorblogs')
         return redirect('index')
     else:
         return redirect('userlogin')
